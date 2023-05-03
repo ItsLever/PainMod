@@ -1,0 +1,127 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>PainMod</AssemblyName>
+    <Description>My first plugin</Description>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>default</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup Label="Nugets">
+      <PackageReference Include="BepInEx.Core" Version="6.0.0-be*" PrivateAssets="all" />
+          <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be*" PrivateAssets="all" />
+          <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+          <PackageReference Include="CoreKeeper.GameLibs" Version="0.5.2.*" />
+          <PackageReference Include="Il2CppInterop.Common" Version="1.6.0" PrivateAssets="all" />
+          <PackageReference Include="Il2CppInterop.Runtime" Version="1.6.0" PrivateAssets="all" />
+          <PackageReference Include="Il2CppInterop.Generator" Version="1.6.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx.Unity.IL2CPP, Version=6.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\core\BepInEx.Unity.IL2CPP.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreLib, Version=1.5.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\plugins\CoreLib_beta\CoreLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreLib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\plugins\CoreLib_beta (1)\CoreLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreLib, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\plugins\CoreMods-CoreLib-2.0.1\CoreLib.dll</HintPath>
+    </Reference>
+    <Reference Include="FewesLight, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\FewesLight.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime, Version=1.1.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime, Version=1.1.3.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime, Version=1.4.3.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppSystem.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Il2CppSystem.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.Base, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.ColorCycling, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.ColorCycling.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.Mods, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.Mods.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.Objects, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.Objects.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.Other, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.Other.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.PP, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.PP.dll</HintPath>
+    </Reference>
+    <Reference Include="Pug.UnityExtensions, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Pug.UnityExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="PugWorldGen, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\PugWorldGen.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Rewired.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Entities, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Physics, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Physics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Physics.Hybrid, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Physics.Hybrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Transforms, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Transforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Transforms.Generated, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Transforms.Generated.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Transforms.Hybrid, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\Unity.Transforms.Hybrid.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\interop\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityExplorer.BIE.IL2CPP.CoreCLR, Version=4.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\plugins\sinai-dev-UnityExplorer_IL2CPP-4.9.2 (1)\UnityExplorer.BIE.IL2CPP.CoreCLR.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityExplorer.BIE.IL2CPP.CoreCLR, Version=4.9.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Games\steamapps\common\Core Keeper\BepInEx\plugins\CoreMods-UnityExplorer_IL2CPP-4.9.1\UnityExplorer.BIE.IL2CPP.CoreCLR.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ModEnergyProjectile.cs" />
+  </ItemGroup>
+</Project>
