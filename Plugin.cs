@@ -147,7 +147,7 @@ namespace PainMod
            wormholeIdol = EntityModule.AddEntity("PainMod:TeleporterToFriend", "Assets/PainMod/Assets/TeleportIdol.prefab");
             
            EntityModule.AddEntityLocalization(wormholeIdol,
-               "Teleportaion Idol",
+               "Teleportation Idol",
                "Cast to teleport to the nearest player further than 10 blocks away");
            /*  Texture2D armorTexture = 
            
