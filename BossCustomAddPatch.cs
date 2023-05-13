@@ -97,7 +97,7 @@ internal class BossCustomAddPatch
                         Plugin.logger.LogInfo("Malugaz under 25% health init phase 3!");
                         __instance.AE_PhaseTransition();
                         __instance.AE_MagicBuildUpSFX();
-                        __instance.AE_Burst();
+                        __instance.AE_DeathBurst();
                         //__instance.optionalHealthBar.background.color = Color.yellow;
                         phase3ShamanTransitionHasHappened = true;
                         shamanCanDoPhase3Move = true;
