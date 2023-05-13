@@ -19,6 +19,7 @@ namespace PainMod
     public Il2CppReferenceField<ParticleSystem> hit;
     public Il2CppReferenceField<ManagedLight> fireLight;
     private GCHandle tilesToCheckHandle;
+    private GCHandle alreadyHitEntitiesHandle;
     public CustomEnergyModProjectile(IntPtr ptr) : base(ptr) { }
 
     public override void OnOccupied()
@@ -70,8 +71,12 @@ namespace PainMod
     public override bool Allocate()
     {
         bool shouldAlloc = base.Allocate();
-        if(shouldAlloc)
+        if (shouldAlloc)
+        {
             tilesToCheckHandle = GCHandle.Alloc(tilesToCheck);
+            alreadyHitEntitiesHandle = GCHandle.Alloc(_alreadyHitEntities);
+        }
+
         return base.Allocate();
     }
 
@@ -79,6 +84,7 @@ namespace PainMod
     {
         base.OnDestroy();
         tilesToCheckHandle.Free();
+        alreadyHitEntitiesHandle.Free();
     }
     }
 }
