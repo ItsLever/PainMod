@@ -5,6 +5,7 @@ using CoreLib;
 using CoreLib.Components;
 using Il2CppInterop.Runtime.InteropTypes.Fields;
 using PugRP;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -75,6 +76,7 @@ namespace PainMod
         {
             tilesToCheckHandle = GCHandle.Alloc(tilesToCheck);
             alreadyHitEntitiesHandle = GCHandle.Alloc(_alreadyHitEntities);
+            _alreadyHitEntities ??= new Il2CppSystem.Collections.Generic.List<Entity>();
         }
 
         return base.Allocate();

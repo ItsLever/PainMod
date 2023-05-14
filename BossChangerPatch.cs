@@ -272,11 +272,23 @@ namespace PainMod
                     {
                         //boss.GetComponent<WeaponDamageCDAuthoring>().damage = 5000;
                     }
+                    else if (boss.objectInfo.objectID == Plugin.myCustomShootThing)
+                    {
+                        if (boss.GetComponent<WindupCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<WindupCDAuthoring>();
+                        var windup = boss.GetComponent<WindupCDAuthoring>();
+                        windup.hasWindup = true;
+                        windup.windupTiers = 7;
+                        windup.windupTime = 30;
+                        windup.weaponEffectType = WeaponEffectType.Metal;
+                        windup.mustWindup = true;
+                        windup.windupMultiplier = 3;
+                    }
                 }
-                else if (boss.objectInfo.objectType == ObjectType.MeleeWeapon)
+                /*else if (boss.objectInfo.objectType == ObjectType.MeleeWeapon)
                 {
                     boss.GetComponent<WeaponDamageCDAuthoring>().damage = 100000;
-                }
+                }*/
                 else if (boss.objectInfo.objectType == ObjectType.PlaceablePrefab)
                 {
                     if (boss.objectInfo.objectID == ObjectID.ElectricalDoor)
@@ -297,7 +309,7 @@ namespace PainMod
                         }
                     }
                 }
-                else if (boss.objectInfo.objectType == ObjectType.Offhand)
+                else if (boss.objectInfo.objectType == ObjectType.Lantern)
                 {
                     //nerfs stuff when afraid of the dark
                     if (boss.objectInfo.objectID == ObjectID.SmallLantern)
