@@ -75,8 +75,8 @@ namespace PainMod
         if (shouldAlloc)
         {
             tilesToCheckHandle = GCHandle.Alloc(tilesToCheck);
-            alreadyHitEntitiesHandle = GCHandle.Alloc(_alreadyHitEntities);
             _alreadyHitEntities ??= new Il2CppSystem.Collections.Generic.List<Entity>();
+            alreadyHitEntitiesHandle = GCHandle.Alloc(_alreadyHitEntities);
         }
 
         return base.Allocate();
