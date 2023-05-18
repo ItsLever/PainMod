@@ -25,6 +25,7 @@ using Il2CppSystem.Reflection;
 using PlayerState;
 using PugTilemap;
 using PugTilemap.Workshop;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using Path = System.IO.Path;
@@ -68,12 +69,14 @@ namespace PainMod
         public static bool darkChallengeActive = false;
         public static ObjectID maxHealthBuffStation;
         public static ObjectID wormholeIdol;
+        public static ObjectID octopusOrb;
         public override void Load()
         {
             ClassInjector.RegisterTypeInIl2Cpp<CustomEnergyModProjectile>();
             ClassInjector.RegisterTypeInIl2Cpp<CustomBuffingStation>();
             ClassInjector.RegisterTypeInIl2Cpp<CustomMaxHpStation>();
             ClassInjector.RegisterTypeInIl2Cpp<FirstSystemTest>();
+            ClassInjector.RegisterTypeInIl2Cpp<OctopusProtectiveOrb>();
             AddComponent<FirstSystemTest>();
             SystemModule.RegisterSystem<CustomStateSystem>();
             ComponentModule.RegisterECSComponent<OctopusModdedStateCD>();
@@ -171,6 +174,9 @@ namespace PainMod
                 "Assets/PainMod/Assets/ModdedEnergyProjectileEntity.prefab");
             maxHealthBuffStation = EntityModule.AddEntity("PainMod:MaxHpBuffStation", "Assets/PainMod/Assets/CustomBuffStationEntity.prefab");
             EntityModule.AddEntityLocalization(maxHealthBuffStation, "Max Health Buffing Station", "Free extra HP! Seems like you're going to need it.");
+            octopusOrb = EntityModule.AddEntity("PainMod:OctopusOrb",
+                "Assets/PainMod/Assets/OctopusProtectionOrbEntity.prefab");
+            EntityModule.AddEntityLocalization(octopusOrb, "Octopus Orb", "yes");
             /* CustomEntityModule.AddEntityLocalization(objectID,
                  "Wall",
                  "yeah theres no way this will work lol."); */
