@@ -18,8 +18,8 @@ public class OctopusProtectiveOrb : ModEntityMonoBehavior
     public override void OnOccupied()
     {
         this.CallBase<EntityMonoBehaviour>(nameof(OnOccupied));
-        lastCrackedStage.Value = GetCrackLevel();
-        Crack(lastCrackedStage, false);
+        //lastCrackedStage.Value = GetCrackLevel();
+        //Crack(lastCrackedStage, false);
     }
     public override void ManagedLateUpdate()
     {
@@ -63,7 +63,7 @@ public class OctopusProtectiveOrb : ModEntityMonoBehavior
     }
     private void PlayEffect()
     {
-        Vector3 position = particleOptions.particleSpawnLocations.ToArray()[0].position;
+        Vector3 position = Vector3.zero;
         Manager.effects.PlayPuff(PuffID.CrystalDebris, position, 10);
         AudioManager.Sfx(SfxID.wall, position, 1f, 1.5f, 0.1f, false, AudioManager.MixerGroupEnum.EFFECTS, false, true, false, 16f, 10f, false, true);
     }
