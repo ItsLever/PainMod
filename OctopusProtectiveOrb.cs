@@ -35,7 +35,7 @@ public class OctopusProtectiveOrb : ModEntityMonoBehavior
     }
     public override void OnDeath()
     {
-        this.CallBase<Projectile>(nameof(OnDeath));
+        this.CallBase<EntityMonoBehaviour>(nameof(OnDeath));
         PlayEffect();
     }
 
