@@ -96,11 +96,12 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             
             if (allEnemiesDead)
             {
-                stateInfo.newState = StateID.Teleport;
+                //stateInfo.newState = StateID.Teleport;
+                stateInfo.newState = StateID.RangeAttack;
                 return true;
             }
             // By returning true here we signal that the 'stateInfo' field has changed
-            return false;
+            //return false;
         }
         if (stateInfo.currentState != octopusFirstState &&
             healthPercent < OctopusStateCd.HpRatioToEnterState)
@@ -115,9 +116,9 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         return false;   
     }
 
-    private float3[] positionsRelative = {new float3(4,0,1), new float3(12,0, 1), new float3(12,0,10), new float3(10,0, -9), new float3(6,0,5),
-        new float3(-3, 0, 3), new float3(-9, 0, 1), new float3(1, 0, -5), new float3(-12, 0, 8), new float3(-6, 0, 6), new float3(-3, 0, -9),
-        new float3(-3, 0, -14), new float3(-10, 0, -12), new float3(6, 0, -6), new float3(5, 0, -12)};
+    private float3[] positionsRelative = {new float3(4,0,1), new float3(12,0, 2), new float3(13,0,9), new float3(11,0, -8), new float3(6,0,5),
+        new float3(-3, 0, 3), new float3(-10, 0, 1), new float3(-1, 0, -4), new float3(-13, 0, 8), new float3(-6, 0, 7), new float3(-4, 0, -8),
+        new float3(-4, 0, -14), new float3(-11, 0, -11), new float3(6, 0, -5), new float3(4, 0, -12)};
     private bool hasSpawnedInEnemies = false;
     private float2 octopusBossLurkSpot;
     private bool hasGottenLurkSpot = false;
@@ -138,24 +139,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 if (!hasSpawnedInEnemies)
                 {
                     Plugin.logger.LogInfo("IN OCTOPUS MODDED STATE");
-                    /*EntityQuery query2 = serverWorld.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<PugDatabase.DatabaseBankCD>());
-                    
-                    Entity entity = EntityUtility.CreateEntity(EntityCommandBuffer,Constants.OctopusMarkerPos + positionsRelative[0] - Manager._instance.player.WorldPosition.ToFloat3()
-                        , ObjectID.CrabEnemy, 1, query2.GetSingleton<PugDatabase.DatabaseBankCD>().databaseBankBlob, 0);
-                    EntityCommandBuffer.AddModComponent<MustBeDestroyedForOctopusLeaveStateCD>(entity);*/
-                    //spawn in the enemies
-                    
                     SpawnInvincibilityEntities(4);
-                    /*EntityCommandBuffer ecb2 = new EntityCommandBuffer(Allocator.Temp);
-                    ecb2.AddModComponent<CantBeAttackedCD>(e);
-                    ecb2.Playback(Manager.ecs.ServerWorld.EntityManager);
-                    ecb2.Dispose();*/
-                    /* for (int i = 0; i < positionsRelative.Length; i++)
-                     {
-                         Manager._instance.player.playerCommandSystem.CreateEntity(ObjectID.CrabEnemy,
-                             (Constants.OctopusMarkerPos + positionsRelative[i]) - Manager._instance.player.WorldPosition.ToFloat3());
-                     }*/
-                    Plugin.logger.LogInfo("Relative to player is " + ((Constants.OctopusMarkerPos + positionsRelative[0]) - Manager._instance.player.WorldPosition.ToFloat3()).ToString());
                     hasSpawnedInEnemies = true;
                 }
                 query = serverWorld.EntityManager.CreateEntityQuery(
@@ -199,9 +183,9 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 (Constants.OctopusMarkerPos + posLeft[rand]) - Manager._instance.player.WorldPosition.ToFloat3());*/
             
             //testing with server side version (not working)
-            Entity crab = EntityUtility.CreateEntity(EntityCommandBuffer,Constants.OctopusMarkerPos + posLeft[rand]
-                , ObjectID.CrabEnemy, 1, bank, 0);
-            EntityCommandBuffer.AddModComponent<MustBeDestroyedForOctopusLeaveStateCD>(crab);
+            Entity orb = EntityUtility.CreateEntity(EntityCommandBuffer,Constants.OctopusMarkerPos + posLeft[rand]
+                , Plugin.octopusOrb, 1, bank, 0);
+            EntityCommandBuffer.AddModComponent<MustBeDestroyedForOctopusLeaveStateCD>(orb);
             posLeft.Remove(posLeft[rand]);
         }
         EntityCommandBuffer.Playback(Manager.ecs.ServerWorld.EntityManager);
