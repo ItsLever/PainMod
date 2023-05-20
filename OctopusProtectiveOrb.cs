@@ -18,7 +18,7 @@ public class OctopusProtectiveOrb : ModEntityMonoBehavior
     public override void OnOccupied()
     {
         this.CallBase<EntityMonoBehaviour>(nameof(OnOccupied));
-        //lastCrackedStage.Value = GetCrackLevel();
+        lastCrackedStage.Value = GetCrackLevel();
         //Crack(lastCrackedStage, false);
     }
     public override void ManagedLateUpdate()
