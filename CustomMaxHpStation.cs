@@ -22,7 +22,7 @@ namespace PainMod
 
         public void OnUse()
         {
-            AudioManager.Sfx(SfxID.lol, transform.position, 0.8f, 1, 0.1f);
+            AudioManager.Sfx(SfxID.eating, transform.position, 0.8f, 1, 0.1f);
             Manager._instance.player.playerCommandSystem.AddOrRefreshCondition(Manager._instance.player.entity, eff.Value, value, duration);
         }
     }

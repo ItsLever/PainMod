@@ -108,8 +108,8 @@ namespace PainMod
             customWall = EntityModule.AddEntity("PainMod:BrickWall", "Assets/PainMod/Assets/CustomWall.prefab");
             
             EntityModule.AddEntityLocalization(customWall,
-                "Clay Brick wall",
-                "Brick");
+                "Clay Bricks wall",
+                "A sturdy wall built from earthy bricks.");
             Tileset brick = EntityModule.GetTilesetId("PainMod:BrickTileset");
             brick1 = brick;
             
@@ -138,9 +138,9 @@ namespace PainMod
             
             EntityModule.AddEntityLocalization(fungalCap,
                 "Funbrella",
-                "Hm. what an oddity, it fills you with the urge to run");
+                "Hm.. what an oddity, it fills you with the urge to run.");
             myCustomShootThing = EntityModule.AddEntity("PainMod:ShootyThing", "Assets/PainMod/Assets/ModStaffEntity.prefab");
-            EntityModule.AddEntityLocalization(myCustomShootThing, "Totally not a ripoff of the Scholar Staff™", "What do you think of my pretty gradients? :D");
+            EntityModule.AddEntityLocalization(myCustomShootThing, "Tempest Staff", "A powerful staff with an orb of unknown origins. It calls upon the power of the deep to channel whirling energy blasts.");
             
             DropTablesModule.AddNewDrop(LootTableID.MushroomEnemy, new DropTableInfo(fungalCap, 1, 0.0125f));
            // mineChallengeActive = true;
@@ -150,8 +150,8 @@ namespace PainMod
            wormholeIdol = EntityModule.AddEntity("PainMod:TeleporterToFriend", "Assets/PainMod/Assets/TeleportIdol.prefab");
             
            EntityModule.AddEntityLocalization(wormholeIdol,
-               "Teleportation Idol",
-               "Cast to teleport to the nearest player further than 10 blocks away");
+               "Linking Idol",
+               "Teleports you to a fellow explorer, consumed in the process.");
            /*  Texture2D armorTexture = 
            
              byte skinId = CustomEntityModule.AddPlayerCustomization(new HelmSkin()
@@ -173,7 +173,7 @@ namespace PainMod
             myCustomModdedProjectile = EntityModule.AddEntity("PainMod:MyCustomModdedProjectile",
                 "Assets/PainMod/Assets/ModdedEnergyProjectileEntity.prefab");
             maxHealthBuffStation = EntityModule.AddEntity("PainMod:MaxHpBuffStation", "Assets/PainMod/Assets/CustomBuffStationEntity.prefab");
-            EntityModule.AddEntityLocalization(maxHealthBuffStation, "Max Health Buffing Station", "Free extra HP! Seems like you're going to need it.");
+            EntityModule.AddEntityLocalization(maxHealthBuffStation, "Healing Supplies", "Supplies for treating bruises, scratches and wounds alike.");
             octopusOrb = EntityModule.AddEntity("PainMod:OctopusOrb",
                 "Assets/PainMod/Assets/OctopusProtectionOrbEntity.prefab");
             EntityModule.AddEntityLocalization(octopusOrb, "Octopus Orb", "yes");
@@ -183,7 +183,7 @@ namespace PainMod
             //logger.LogInfo("Projectile SB mod is: " + ProjectileSBMod);
             LocalizationModule.AddTerm("ModEmotes/DarknessWarn", "Its dark in here");
             LocalizationModule.AddTerm("ModEmotes/DarknessWarn2", "Lights out!");
-            LocalizationModule.AddTerm("ModEmotes/GoodLuck", "Gulp");
+            LocalizationModule.AddTerm("ModEmotes/GoodLuck", "Challenge up!");
             LocalizationModule.AddTerm("ModEmotes/BewareWorm", "This can't be good...");
             LocalizationModule.AddTerm("ModEmotes/ShamanBossAwaken", "It's not over");
             var harmony = new Harmony(PluginInfo.PLUGIN_GUID); 

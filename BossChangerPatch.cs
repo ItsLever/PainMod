@@ -57,6 +57,13 @@ namespace PainMod
                          boss.gameObject.GetComponent<DropsLootBufferAuthoring>().Values =
                              new Il2CppSystem.Collections.Generic.List<LootDrop>();
                          boss.gameObject.GetComponent<DropsLootBufferAuthoring>().Values.Add(lD);*/
+                        LootDrop lD2 = new LootDrop();
+                         lD2.lootDropID = Plugin.maxHealthBuffStation;
+                         lD2.amount = 1;
+                         lD2.multiplayerAmountAdditionScaling = 0f;
+                         boss.gameObject.GetComponent<DropsLootBufferAuthoring>().Values =
+                             new Il2CppSystem.Collections.Generic.List<LootDrop>();
+                         boss.gameObject.GetComponent<DropsLootBufferAuthoring>().Values.Add(lD2);
                     }
                     else if (boss.gameObject.GetComponent<EntityMonoBehaviourData>().objectInfo.objectID ==
                              ObjectID.SlimeBoss)
