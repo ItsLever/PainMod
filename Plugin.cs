@@ -87,6 +87,7 @@ namespace PainMod
             ComponentModule.RegisterECSComponent<LarvaFleeStateCDAuthoring>();
             ComponentModule.RegisterECSComponent<MustBeDestroyedForOctopusLeaveStateCD>();
             ComponentModule.RegisterECSComponent<MustBeDestroyedForOctopusLeaveStateCDAuthoring>();
+            SystemModule.RegisterSystem<AntiCheeseSystem>();
             logger = Log;
             // Plugin startup logic
             ClassInjector.RegisterTypeInIl2Cpp<MonoStuff>();

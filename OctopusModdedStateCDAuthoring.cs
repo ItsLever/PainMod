@@ -12,7 +12,7 @@ public class OctopusModdedStateCDAuthoring : ModCDAuthoringBase
 {
     public Il2CppValueField<float> hpToEnter;
     public Il2CppValueField<float> hpToEnter2;
-    public Il2CppValueField<float> hpToEnter3;
+    public Il2CppValueField<int> iteration;
 
     public OctopusModdedStateCDAuthoring(IntPtr ptr) : base(ptr) { }
     
@@ -22,7 +22,7 @@ public class OctopusModdedStateCDAuthoring : ModCDAuthoringBase
         {
             HpRatioToEnterState = hpToEnter,
             HpRatioToEnterState2 = hpToEnter2,
-            HpRatioToEnterState3 = hpToEnter3
+            iteration = iteration
         });
     }
 }

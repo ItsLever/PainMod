@@ -7,5 +7,5 @@ public struct OctopusModdedStateCD
 {
     public float HpRatioToEnterState;
     public float HpRatioToEnterState2;
-    public float HpRatioToEnterState3;
+    public int iteration;
 }

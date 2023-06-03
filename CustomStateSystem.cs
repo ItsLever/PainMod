@@ -8,8 +8,10 @@ using Rewired;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using Color = System.Drawing.Color;
 using Random = UnityEngine.Random;
 
 namespace PainMod;
@@ -57,6 +59,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         }
 
         hasSpawnedInEnemies = false;
+        hasTeleportOutOfState = false;
     }
 
     public void OnServerStopped()
@@ -76,6 +79,8 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
     }
 
     private EntityQuery query;
+    public static bool hasTeleportOutOfState = false;
+    public static bool hasStartedSecondState = false;
     public bool OnUpdate(Entity entity, EntityCommandBuffer ecb, ref StateRequestData data, ref StateRequestContainers containers,
         ref StateInfoCD stateInfo)
     {
@@ -85,33 +90,42 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         // Get needed data
         HealthCD healthCd = containers._healthGroup[entity];
         OctopusModdedStateCD OctopusStateCd = octopusModStateGroup[entity];
+        DamageReductionCD damageReductionCd = containers._damageReductionGroup[entity];
         float healthPercent = healthCd.health / (float) healthCd.maxHealth;
-        Plugin.logger.LogInfo("Health percent is " + healthPercent + " and ratio to enter state is " + OctopusStateCd.HpRatioToEnterState);
+        //Plugin.logger.LogInfo("Health percent is " + healthPercent + " and ratio to enter state is " + OctopusStateCd.HpRatioToEnterState);
         // If the entity has too low HP enter flee state
         if (stateInfo.currentState == octopusFirstState)
         {
             stateInfo.newState = octopusFirstState;
-            
-            
-            
             if (allEnemiesDead)
             {
+                ChatWindow_Patch.SendMessage("All enemies are dead now!", UnityEngine.Color.red);
                 //stateInfo.newState = StateID.Teleport;
-                stateInfo.newState = StateID.RangeAttack;
+                damageReductionCd.reduction = 0;
+                serverWorld.EntityManager.SetModComponentData(entity, damageReductionCd);
+                stateInfo.LeaveState();
+                stateInfo.EnterState(StateID.RangeAttack);
                 return true;
             }
             // By returning true here we signal that the 'stateInfo' field has changed
-            //return false;
+            return true;
         }
         if (stateInfo.currentState != octopusFirstState &&
-            healthPercent < OctopusStateCd.HpRatioToEnterState)
+            healthPercent < OctopusStateCd.HpRatioToEnterState && !hasSpawnedInEnemies)
         {
             stateInfo.newState = octopusFirstState;
             // By returning true here we signal that the 'stateInfo' field has changed
             return true;
         }
-        
-        
+
+        if (stateInfo.currentState != octopusFirstState && healthPercent < OctopusStateCd.HpRatioToEnterState2 && !hasStartedSecondState)
+        {
+            hasSpawnedInEnemies = false;
+            OctopusStateCd.iteration = 2;
+            serverWorld.EntityManager.SetModComponentData(entity, OctopusStateCd);
+            hasStartedSecondState = true;
+        }
+
         // Nothing changed
         return false;   
     }
@@ -132,6 +146,8 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         foreach (Entity e in entitiesArray)
         {
             StateInfoCD stateInfo = serverWorld.EntityManager.GetModComponentData<StateInfoCD>(e);
+            OctopusModdedStateCD moddedStateCd = serverWorld.EntityManager.GetModComponentData<OctopusModdedStateCD>(e);
+            DamageReductionCD reductionCd = serverWorld.EntityManager.GetModComponentData<DamageReductionCD>(e);
             
             //Plugin.logger.LogInfo("Current state is " + stateInfo.currentState);
             if (stateInfo.currentState == octopusFirstState)
@@ -139,7 +155,13 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 if (!hasSpawnedInEnemies)
                 {
                     Plugin.logger.LogInfo("IN OCTOPUS MODDED STATE");
-                    SpawnInvincibilityEntities(4);
+                    if(moddedStateCd.iteration==1)
+                        SpawnInvincibilityEntities(4);
+                    else if (moddedStateCd.iteration==2)
+                        SpawnInvincibilityEntities(7);
+                    //do invincible stuff
+                    reductionCd.reduction = 1000000;
+                    serverWorld.EntityManager.SetModComponentData(e, reductionCd);
                     hasSpawnedInEnemies = true;
                 }
                 query = serverWorld.EntityManager.CreateEntityQuery(

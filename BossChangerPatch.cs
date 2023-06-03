@@ -200,9 +200,12 @@ namespace PainMod
                         boss.gameObject.GetComponent<DropsLootBufferAuthoring>().Values.Add(lD2);
                         if (boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>()==null)
                             boss.gameObject.AddComponent<OctopusModdedStateCDAuthoring>();
-                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter.Value = 0.95f;
-                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter2.Value = 0.89f;
-                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter3.Value = 0.75f;
+                        //this should be 0.75 and 0.35
+                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter.Value = 0.75f;
+                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter2.Value = 0.35f;
+                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().iteration.Value = 1;
+                        if (boss.gameObject.GetComponent<DamageReductionCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<DamageReductionCDAuthoring>();
                     }
 
                     Plugin.logger.LogInfo(string.Format("Set {0}'s max health to {1}", boss.name,

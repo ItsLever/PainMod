@@ -242,7 +242,7 @@ namespace PainMod
 
                         {
                             Plugin.logger.LogError("Uh oh damage time ig!");
-                            Manager._instance.player.DealDamageToPlayer(50, Manager._instance.player.WorldPosition, 0);
+                            Manager._instance.player.DealDamageToPlayer(50, /*Manager._instance.player.WorldPosition*/ float3.zero, 0);
                         }
                     }
 

@@ -10,18 +10,18 @@
     </PropertyGroup>
 
     <ItemGroup Label="Nugets">
-        <PackageReference Include="BepInEx.Core" Version="6.0.0-be*" PrivateAssets="all"/>
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be*" PrivateAssets="all"/>
-        <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*"/>
-        <PackageReference Include="CoreKeeper.GameLibs" Version="0.6.0.*"/>
-        <PackageReference Include="CoreKeeper.Modding.CoreLib" Version="2.0.1"/>
+        <PackageReference Include="BepInEx.Core" Version="6.0.0-be*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+        <PackageReference Include="CoreKeeper.GameLibs" Version="0.6.0.*" />
+        <PackageReference Include="CoreKeeper.Modding.CoreLib" Version="2.0.1" />
 
-        <PackageReference Include="Il2CppInterop.Common" Version="1.5.0-dots" PrivateAssets="all"/>
-        <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.0-dots" PrivateAssets="all"/>
-        <PackageReference Include="Il2CppInterop.Generator" Version="1.5.0-dots" PrivateAssets="all"/>
+        <PackageReference Include="Il2CppInterop.Common" Version="1.5.0-dots" PrivateAssets="all" />
+        <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.0-dots" PrivateAssets="all" />
+        <PackageReference Include="Il2CppInterop.Generator" Version="1.5.0-dots" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="ModEnergyProjectile.cs"/>
+        <Compile Remove="ModEnergyProjectile.cs" />
     </ItemGroup>
 </Project>

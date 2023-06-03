@@ -48,7 +48,7 @@ internal class BossCustomAddPatch
             bool isOwner = Manager._instance._ecsManager.ServerWorld!=null;
             if (isOwner)
             {
-                Plugin.logger.LogInfo("Hello " + Players.GetCurrentPlayer().playerName + "! You are the owner of this server");
+                //Plugin.logger.LogInfo("Hello " + Players.GetCurrentPlayer().playerName + "! You are the owner of this server");
             }
 
             var origo = Manager._instance._cameraManager.OrigoTransform;
@@ -59,11 +59,11 @@ internal class BossCustomAddPatch
             }
             
             //__instance.previousHealth = __instance.GetMaxHealth();
-                Plugin.logger.LogInfo("Malugaz health is now " +
-                                      ((float) ((float) __instance.currentHealth / (float) __instance.GetMaxHealth()) *
-                                       100f) * Players.GetAllPlayers().Count + "!");
-                Plugin.logger.LogInfo("Malugaz full health is " + __instance.GetMaxHealth() +
-                                      " and the current health is " + __instance.currentHealth + " and previous health is " + __instance.previousHealth + ". Due to this malugaz phase 2 started is " + phase2ShamanTransitionHasHappened + "and phase 3 started is " + phase3ShamanTransitionHasHappened);
+               // Plugin.logger.LogInfo("Malugaz health is now " +
+               //                       ((float) ((float) __instance.currentHealth / (float) __instance.GetMaxHealth()) *
+               //                        100f) * Players.GetAllPlayers().Count + "!");
+               // Plugin.logger.LogInfo("Malugaz full health is " + __instance.GetMaxHealth() +
+               //                       " and the current health is " + __instance.currentHealth + " and previous health is " + __instance.previousHealth + ". Due to this malugaz phase 2 started is " + phase2ShamanTransitionHasHappened + "and phase 3 started is " + phase3ShamanTransitionHasHappened);
                 if (__instance.currentHealth  * Players.GetAllPlayers().Count == __instance.GetMaxHealth())
                 {
                     isAlreadyDead = false;
