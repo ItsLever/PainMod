@@ -28,6 +28,10 @@ public class FirstSystemTest : MonoBehaviour
     private int aggrSlimeSpeed = 165;
     private int shamanDmg = 186;
     private int shamanHP = 1428;
+    private int biglarvaHp = 980;
+    private int biglarvaDmg = 153;
+    private int grubHp = 630;
+    private int grubDmg = 110;
     //private bool birdInPhase2 = false;
     public FirstSystemTest(IntPtr ptr) : base(ptr) { }
     private void Awake()
@@ -122,6 +126,47 @@ public class FirstSystemTest : MonoBehaviour
                                 rAtkState.maxCooldown = 2;
                                 rAtkState.rangeDamage = shamanDmg;
                                 serverWorld.EntityManager.SetComponentData(e2, rAtkState);
+                            }
+                        }
+
+                        if (serverWorld.EntityManager.GetModComponentData<ObjectDataCD>(e2).objectID ==
+                            ObjectID.BigLarva)
+                        {
+                            if (serverWorld.EntityManager.GetModComponentData<HealthCD>(e2).maxHealth != biglarvaHp)
+                            {
+                                HealthCD healthCD = serverWorld.EntityManager.GetModComponentData<HealthCD>(e2);
+                                healthCD.maxHealth = biglarvaHp;
+                                healthCD.health = biglarvaHp;
+                                serverWorld.EntityManager.SetComponentData(e2, healthCD);
+                                Plugin.logger.LogInfo("This is a new big larva and its hp is now " + serverWorld.EntityManager.GetModComponentData<HealthCD>(e2).maxHealth);
+                            }
+
+                            if (serverWorld.EntityManager.GetModComponentData<MeleeAttackStateCD>(e2).meleeDamage !=
+                                biglarvaDmg)
+                            {
+                                MeleeAttackStateCD attackStateCd = serverWorld.EntityManager.GetModComponentData<MeleeAttackStateCD>(e2);
+                                attackStateCd.meleeDamage = biglarvaDmg;
+                                serverWorld.EntityManager.SetComponentData(e2, attackStateCd);
+                            }
+                        }
+
+                        if (serverWorld.EntityManager.GetModComponentData<ObjectDataCD>(e2).objectID ==
+                            ObjectID.Larva)
+                        {
+                            if (serverWorld.EntityManager.GetModComponentData<HealthCD>(e2).maxHealth != grubHp)
+                            {
+                                HealthCD healthCD = serverWorld.EntityManager.GetModComponentData<HealthCD>(e2);
+                                healthCD.maxHealth = grubHp;
+                                healthCD.health = grubHp;
+                                serverWorld.EntityManager.SetComponentData(e2, healthCD);
+                            }
+
+                            if (serverWorld.EntityManager.GetModComponentData<MeleeAttackStateCD>(e2).meleeDamage !=
+                                grubDmg)
+                            {
+                                MeleeAttackStateCD attackStateCd = serverWorld.EntityManager.GetModComponentData<MeleeAttackStateCD>(e2);
+                                attackStateCd.meleeDamage = grubDmg;
+                                serverWorld.EntityManager.SetComponentData(e2, attackStateCd);
                             }
                         }
                     }

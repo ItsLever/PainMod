@@ -235,7 +235,7 @@ namespace PainMod
                     }
                     else if (boss.objectInfo.objectID == ObjectID.MushroomEnemy)
                     {
-                        boss.GetComponent<MovementSpeedCDAuthoring>().speed = 30;
+                        boss.GetComponent<MovementSpeedCDAuthoring>().speed = 20;
                         boss.GetComponent<RandomWalkStateAuthoring>().minIdleDuration = 0.1f;
                         boss.GetComponent<RandomWalkStateAuthoring>().maxIdleDuration = 0.25f;
                         boss.GetComponent<RandomWalkStateAuthoring>().maxWalkDuration = 8;
@@ -248,7 +248,10 @@ namespace PainMod
                     }
                     else if (boss.objectInfo.objectID == ObjectID.CavelingBrute)
                     {
-                        boss.GetComponent<MovementSpeedCDAuthoring>().speed = 80f;
+                        //boss.GetComponent<MovementSpeedCDAuthoring>().speed = 80f;
+                        boss.GetComponent<HealthCDAuthoring>().dontCalculateHealthFromLevel = true;
+                        boss.GetComponent<HealthCDAuthoring>().maxHealth = 5540;
+                        boss.GetComponent<HealthCDAuthoring>().startHealth = 5540;
                         boss.GetComponent<RandomWalkStateAuthoring>().minIdleDuration = 0.1f;
                         boss.GetComponent<RandomWalkStateAuthoring>().maxIdleDuration = 0.25f;
                         boss.GetComponent<RandomWalkStateAuthoring>().maxWalkDuration = 8;
@@ -258,6 +261,14 @@ namespace PainMod
                     {
                         boss.GetComponent<MovementSpeedCDAuthoring>().speed = 50;
                         boss.GetComponent<ChaseStateAuthoringCD>().moveSpeedMultiplier = 1.5f;
+                    }
+                    else if (boss.objectInfo.objectID == ObjectID.Larva)
+                    {
+                        if (boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<LarvaFleeStateCDAuthoring>();
+                        boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>().hpToFlee.Value = 0.40f;
+                        boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>().hpToLeaveFlee.Value = 0.89f;
+                        boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>().speedToFlee.Value = 2.0f;
                     }
                 }
                 else if (boss.objectInfo.objectType == ObjectType.NonObtainable)

@@ -81,6 +81,10 @@ namespace PainMod
             SystemModule.RegisterSystem<CustomStateSystem>();
             ComponentModule.RegisterECSComponent<OctopusModdedStateCD>();
             ComponentModule.RegisterECSComponent<OctopusModdedStateCDAuthoring>();
+            SystemModule.RegisterSystem<LarvaFlee.LarvaFleeStateSystem>();
+            SystemModule.RegisterStateRequester<LarvaFlee.LarvaFleeStateRequester>();
+            ComponentModule.RegisterECSComponent<LarvaFleeStateCD>();
+            ComponentModule.RegisterECSComponent<LarvaFleeStateCDAuthoring>();
             ComponentModule.RegisterECSComponent<MustBeDestroyedForOctopusLeaveStateCD>();
             ComponentModule.RegisterECSComponent<MustBeDestroyedForOctopusLeaveStateCDAuthoring>();
             logger = Log;
