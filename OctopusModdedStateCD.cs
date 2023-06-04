@@ -8,4 +8,5 @@ public struct OctopusModdedStateCD
     public float HpRatioToEnterState;
     public float HpRatioToEnterState2;
     public int iteration;
+    public int maxTentacleCap;
 }

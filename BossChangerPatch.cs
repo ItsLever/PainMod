@@ -204,6 +204,7 @@ namespace PainMod
                         boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter.Value = 0.75f;
                         boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().hpToEnter2.Value = 0.35f;
                         boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().iteration.Value = 1;
+                        boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().tentacleCap.Value = 10;
                         if (boss.gameObject.GetComponent<DamageReductionCDAuthoring>() == null)
                             boss.gameObject.AddComponent<DamageReductionCDAuthoring>();
                     }
@@ -272,6 +273,11 @@ namespace PainMod
                         boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>().hpToFlee.Value = 0.40f;
                         boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>().hpToLeaveFlee.Value = 0.89f;
                         boss.gameObject.GetComponent<LarvaFleeStateCDAuthoring>().speedToFlee.Value = 2.0f;
+                    }
+                    else if (boss.objectInfo.objectID == ObjectID.OctopusTentacle)
+                    {
+                        if (boss.gameObject.GetComponent<OctopusTenticleCounterCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<OctopusTenticleCounterCDAuthoring>();
                     }
                 }
                 else if (boss.objectInfo.objectType == ObjectType.NonObtainable)

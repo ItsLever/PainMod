@@ -117,6 +117,20 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             // By returning true here we signal that the 'stateInfo' field has changed
             return true;
         }
+        if (stateInfo.newState == StateID.OctopusBossSpawnTentacles && stateInfo.currentState!=StateID.OctopusBossSpawnTentacles)
+        {
+            if (existingTenticleCount >= OctopusStateCd.maxTentacleCap)
+            {
+                Plugin.logger.LogInfo("There are " + existingTenticleCount + " tentacles");
+                float v = Random.value;
+                if (v >= 0.5f)
+                    stateInfo.newState = stateInfo.currentState;
+                else
+                    stateInfo.newState = StateID.Teleport;
+                return true;
+            }
+            return false;
+        }
 
         if (stateInfo.currentState != octopusFirstState && healthPercent < OctopusStateCd.HpRatioToEnterState2 && !hasStartedSecondState)
         {
@@ -138,6 +152,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
     private bool hasGottenLurkSpot = false;
     private EntityCommandBuffer EntityCommandBuffer;
     private bool allEnemiesDead;
+    private static int existingTenticleCount = 0;
     private void FixedUpdate()
     {
         if (serverWorld == null) return;
@@ -175,6 +190,16 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 } 
                 Plugin.logger.LogInfo("Amount of entities with this thing is " + enemiesLeft);
                 allEnemiesDead = enemiesLeft == 0;
+                EntityQuery q2 = serverWorld.EntityManager.CreateEntityQuery(
+                    ComponentModule.ReadOnly<OctopusTenticleCounterCD>(),
+                    ComponentModule.ReadWrite<Translation>());
+                existingTenticleCount = 0;
+                foreach (var ent2 in q2.ToEntityArray(Allocator.Temp))
+                { 
+                    if (serverWorld.EntityManager.GetModComponentData<HealthCD>(ent2).health > 0)
+                        existingTenticleCount++;
+                }
+                Plugin.logger.LogInfo("Amount of tenticles with this thing is " + existingTenticleCount);
             }
             else if (stateInfo.currentState == StateID.OctopusBossLurkingBelow)
             {
