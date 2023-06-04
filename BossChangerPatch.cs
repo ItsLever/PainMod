@@ -207,6 +207,11 @@ namespace PainMod
                         boss.gameObject.GetComponent<OctopusModdedStateCDAuthoring>().tentacleCap.Value = 10;
                         if (boss.gameObject.GetComponent<DamageReductionCDAuthoring>() == null)
                             boss.gameObject.AddComponent<DamageReductionCDAuthoring>();
+                        if (boss.gameObject.GetComponent<RotatingBeamCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<RotatingBeamCDAuthoring>();
+                        boss.gameObject.GetComponent<RotatingBeamCDAuthoring>().id.Value = ObjectID.OctopusBossProjectile;
+                        boss.gameObject.GetComponent<RotatingBeamCDAuthoring>().amt.Value = 18;
+                        boss.gameObject.GetComponent<RotatingBeamCDAuthoring>().speed.Value = 1;
                     }
 
                     Plugin.logger.LogInfo(string.Format("Set {0}'s max health to {1}", boss.name,

@@ -12,6 +12,7 @@ using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 using Color = System.Drawing.Color;
+using Math = Unity.Physics.Math;
 using Random = UnityEngine.Random;
 
 namespace PainMod;
@@ -163,6 +164,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             StateInfoCD stateInfo = serverWorld.EntityManager.GetModComponentData<StateInfoCD>(e);
             OctopusModdedStateCD moddedStateCd = serverWorld.EntityManager.GetModComponentData<OctopusModdedStateCD>(e);
             DamageReductionCD reductionCd = serverWorld.EntityManager.GetModComponentData<DamageReductionCD>(e);
+            RotatingBeamCD rotatingBeamCd = serverWorld.EntityManager.GetModComponentData<RotatingBeamCD>(e);
             
             //Plugin.logger.LogInfo("Current state is " + stateInfo.currentState);
             if (stateInfo.currentState == octopusFirstState)
@@ -178,7 +180,11 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                     reductionCd.reduction = 1000000;
                     serverWorld.EntityManager.SetModComponentData(e, reductionCd);
                     hasSpawnedInEnemies = true;
+                    if (serverWorld.EntityManager.HasModComponent<RotatingBeamCD>(e))
+                        CreateRotatingBeams(rotatingBeamCd);
                 }
+                if(serverWorld.EntityManager.HasModComponent<RotatingBeamCD>(e))
+                    DoRotations(rotatingBeamCd);
                 query = serverWorld.EntityManager.CreateEntityQuery(
                     ComponentModule.ReadOnly<MustBeDestroyedForOctopusLeaveStateCD>(),
                     ComponentModule.ReadWrite<Translation>());
@@ -210,6 +216,42 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 //+10 and -5
                 //octopus boss asleep spawn
             }
+        }
+    }
+
+    private float timer;
+
+    private void CreateRotatingBeams(RotatingBeamCD rotatingBeamCd)
+    {
+        timer = Random.Range(0, Mathf.PI);
+        EntityQuery query2 = Manager.ecs.ServerWorld.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<PugDatabase.DatabaseBankCD>());
+        BlobAssetReference<PugDatabase.PugDatabaseBank> bank = query2.GetSingleton<PugDatabase.DatabaseBankCD>()
+            .databaseBankBlob;
+        EntityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
+        List<float3> posLeft = new List<float3>(positionsRelative);
+        for (int i = 0; i < rotatingBeamCd.amount; i++)
+        {
+            Entity orb = EntityUtility.CreateEntity(EntityCommandBuffer, Constants.OctopusMarkerPos
+                , rotatingBeamCd.ObjectID, 1, bank, 0);
+            EntityCommandBuffer.AddModComponent<DoesCircleCD>(orb);
+        }
+
+        EntityCommandBuffer.Playback(Manager.ecs.ServerWorld.EntityManager);
+        EntityCommandBuffer.Dispose();
+    }
+    private void DoRotations(RotatingBeamCD rotatingBeamCd)
+    {
+        timer += Time.fixedDeltaTime * rotatingBeamCd.speed;
+        EntityQuery circleQuery = serverWorld.EntityManager.CreateEntityQuery(
+            ComponentModule.ReadOnly<DoesCircleCD>(),
+            ComponentModule.ReadWrite<Translation>());
+        int i = 1;
+        foreach (var ent in circleQuery.ToEntityArray(Allocator.Temp))
+        {
+            Translation temp = serverWorld.EntityManager.GetModComponentData<Translation>(ent);
+            temp.Value = Constants.OctopusMarkerPos + new float3(i * Mathf.Cos(timer), 0, i * Mathf.Sin(timer));
+            serverWorld.EntityManager.SetModComponentData(ent, temp);
+            i++;
         }
     }
 

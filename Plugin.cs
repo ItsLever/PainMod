@@ -90,6 +90,10 @@ namespace PainMod
             SystemModule.RegisterSystem<AntiCheeseSystem>();
             ComponentModule.RegisterECSComponent<OctopusTenticleCounterCD>();
             ComponentModule.RegisterECSComponent<OctopusTenticleCounterCDAuthoring>();
+            ComponentModule.RegisterECSComponent<RotatingBeamCD>();
+            ComponentModule.RegisterECSComponent<RotatingBeamCDAuthoring>();
+            ComponentModule.RegisterECSComponent<DoesCircleCD>();
+            ComponentModule.RegisterECSComponent<DoesCircleCDAuthoring>();
             logger = Log;
             // Plugin startup logic
             ClassInjector.RegisterTypeInIl2Cpp<MonoStuff>();
