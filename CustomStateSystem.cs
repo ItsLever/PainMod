@@ -184,7 +184,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                         CreateRotatingBeams(rotatingBeamCd);
                 }
                 if(serverWorld.EntityManager.HasModComponent<RotatingBeamCD>(e))
-                    DoRotations(rotatingBeamCd);
+                    DoRotations(rotatingBeamCd, e);
                 query = serverWorld.EntityManager.CreateEntityQuery(
                     ComponentModule.ReadOnly<MustBeDestroyedForOctopusLeaveStateCD>(),
                     ComponentModule.ReadWrite<Translation>());
@@ -239,18 +239,26 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         EntityCommandBuffer.Playback(Manager.ecs.ServerWorld.EntityManager);
         EntityCommandBuffer.Dispose();
     }
-    private void DoRotations(RotatingBeamCD rotatingBeamCd)
+    private void DoRotations(RotatingBeamCD rotatingBeamCd, Entity owner)
     {
         timer += Time.fixedDeltaTime * rotatingBeamCd.speed;
         EntityQuery circleQuery = serverWorld.EntityManager.CreateEntityQuery(
+            ComponentModule.ReadOnly<ProjectileCD>(),
             ComponentModule.ReadOnly<DoesCircleCD>(),
+            ComponentModule.ReadOnly<OwnerCD>(),
             ComponentModule.ReadWrite<Translation>());
         int i = 1;
         foreach (var ent in circleQuery.ToEntityArray(Allocator.Temp))
         {
+            OwnerCD ownerCd = serverWorld.EntityManager.GetModComponentData<OwnerCD>(ent);
+            ownerCd.owner = owner;
+            serverWorld.EntityManager.SetModComponentData(ent, ownerCd);
             Translation temp = serverWorld.EntityManager.GetModComponentData<Translation>(ent);
             temp.Value = Constants.OctopusMarkerPos + new float3(i * Mathf.Cos(timer), 0, i * Mathf.Sin(timer));
             serverWorld.EntityManager.SetModComponentData(ent, temp);
+            ProjectileCD projectileCd = serverWorld.EntityManager.GetModComponentData<ProjectileCD>(ent);
+            projectileCd.damage = 420;
+            serverWorld.EntityManager.SetModComponentData(ent, projectileCd);
             i++;
         }
     }
