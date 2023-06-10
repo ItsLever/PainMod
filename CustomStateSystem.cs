@@ -82,6 +82,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
     private EntityQuery query;
     public static bool hasTeleportOutOfState = false;
     public static bool hasStartedSecondState = false;
+    public static bool isDoingForcedTeleport = false;
     public bool OnUpdate(Entity entity, EntityCommandBuffer ecb, ref StateRequestData data, ref StateRequestContainers containers,
         ref StateInfoCD stateInfo)
     {
@@ -92,6 +93,10 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         HealthCD healthCd = containers._healthGroup[entity];
         OctopusModdedStateCD OctopusStateCd = octopusModStateGroup[entity];
         DamageReductionCD damageReductionCd = containers._damageReductionGroup[entity];
+        OctopusBossSpawnTentaclesStateCD bossSpawnTentaclesStateCd = containers._spawnTentacleGroup[entity];
+        RangeAttackStateCD rangeAttackStateCd = containers._rangeStateGroup[entity];
+        TeleportStateCD teleportStateCd = containers._teleportStateGroup[entity];
+        IsInCombatCD inCombatCd = containers._isInCombatGroup[entity];
         float healthPercent = healthCd.health / (float) healthCd.maxHealth;
         //Plugin.logger.LogInfo("Health percent is " + healthPercent + " and ratio to enter state is " + OctopusStateCd.HpRatioToEnterState);
         // If the entity has too low HP enter flee state
@@ -111,25 +116,43 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             // By returning true here we signal that the 'stateInfo' field has changed
             return true;
         }
+
+        if (isDoingForcedTeleport)
+            teleportStateCd.targetDestination = Constants.OctopusMarkerPos;
         if (stateInfo.currentState != octopusFirstState &&
             healthPercent < OctopusStateCd.HpRatioToEnterState && !hasSpawnedInEnemies)
         {
-            stateInfo.newState = octopusFirstState;
+            if (!isDoingForcedTeleport)
+            {
+                stateInfo.newState = StateID.Teleport;
+                isDoingForcedTeleport = true;
+            }
+            else if(stateInfo.newState!=StateID.Teleport)
+            {
+                stateInfo.newState = octopusFirstState;
+                isDoingForcedTeleport = false;
+            }
             // By returning true here we signal that the 'stateInfo' field has changed
             return true;
         }
-        if (stateInfo.newState == StateID.OctopusBossSpawnTentacles && stateInfo.currentState!=StateID.OctopusBossSpawnTentacles)
+        
+
+        /*if (existingTenticleCount >= OctopusStateCd.maxTentacleCap && stateInfo.newState==StateID.OctopusBossSpawnTentacles)
         {
-            if (existingTenticleCount >= OctopusStateCd.maxTentacleCap)
-            {
-                Plugin.logger.LogInfo("There are " + existingTenticleCount + " tentacles");
-                float v = Random.value;
-                if (v >= 0.5f)
-                    stateInfo.newState = stateInfo.currentState;
-                else
-                    stateInfo.newState = StateID.Teleport;
-                return true;
-            }
+            bossSpawnTentaclesStateCd.cooldownTimer.Start(data._elapsedTime, 100000);
+            rangeAttackStateCd.isDisabled = false;
+            stateInfo.newState = StateID.RangeAttack;
+            stateInfo.locked = true;
+            rangeAttackStateCd.internalState = 1;
+            return true;
+        } */
+        /*
+        else if(inCombatCd.isInCombat)
+            bossSpawnTentaclesStateCd.cooldownTimer.Start(data._elapsedTime, bossSpawnTentaclesStateCd.minCooldown);
+        */
+        if (stateInfo.newState == StateID.OctopusBossSpawnTentacles || stateInfo.currentState == StateID.OctopusBossSpawnTentacles)
+        {
+            Plugin.logger.LogInfo("Going to spawn tentacle state at " + existingTenticleCount + " tentacles");
             return false;
         }
 
@@ -196,31 +219,70 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 } 
                 Plugin.logger.LogInfo("Amount of entities with this thing is " + enemiesLeft);
                 allEnemiesDead = enemiesLeft == 0;
-                EntityQuery q2 = serverWorld.EntityManager.CreateEntityQuery(
-                    ComponentModule.ReadOnly<OctopusTenticleCounterCD>(),
+                EntityQuery circleQuery1= serverWorld.EntityManager.CreateEntityQuery(
+                    ComponentModule.ReadOnly<ProjectileCD>(),
+                    ComponentModule.ReadOnly<FactionCD>(),
+                    ComponentModule.ReadOnly<DoesCircleCD>(),
+                    ComponentModule.ReadOnly<OwnerCD>(),
+                    ComponentModule.ReadOnly<DestroyTimerCD>(),
                     ComponentModule.ReadWrite<Translation>());
-                existingTenticleCount = 0;
-                foreach (var ent2 in q2.ToEntityArray(Allocator.Temp))
-                { 
-                    if (serverWorld.EntityManager.GetModComponentData<HealthCD>(ent2).health > 0)
-                        existingTenticleCount++;
-                }
-                Plugin.logger.LogInfo("Amount of tenticles with this thing is " + existingTenticleCount);
-            }
-            else if (stateInfo.currentState == StateID.OctopusBossLurkingBelow)
-            {
-                if (!hasGottenLurkSpot)
+                foreach (var ent in circleQuery1.ToEntityArray(Allocator.Temp))
                 {
-                    //hasSpawnedInEnemies = false;
+                    Plugin.logger.LogInfo("Removing destroy timer component");
+                    ComponentType componentType = ComponentType.FromTypeIndex(ComponentModule.GetModTypeIndex<DestroyTimerCD>());
+                    serverWorld.EntityManager.RemoveComponent(ent, componentType);
                 }
-                //+10 and -5
-                //octopus boss asleep spawn
+                if (allEnemiesDead)
+                {
+                    EntityQuery circleQuery2 = serverWorld.EntityManager.CreateEntityQuery(
+                        ComponentModule.ReadOnly<ProjectileCD>(),
+                        ComponentModule.ReadOnly<FactionCD>(),
+                        ComponentModule.ReadOnly<DoesCircleCD>(),
+                        ComponentModule.ReadOnly<OwnerCD>(),
+                        ComponentModule.ReadWrite<Translation>());
+                    foreach (var ent in circleQuery2.ToEntityArray(Allocator.Temp))
+                    {
+                        Plugin.logger.LogInfo("Destroying entity");
+                        serverWorld.EntityManager.DestroyEntity(ent);
+                    }
+                }
             }
+            else if (stateInfo.currentState == StateID.Teleport)
+            {
+                if (isDoingForcedTeleport)
+                {
+                    TeleportStateCD teleportStateCd = serverWorld.EntityManager.GetModComponentData<TeleportStateCD>(e);
+                    teleportStateCd.targetDestination = Constants.OctopusMarkerPos;
+                    serverWorld.EntityManager.SetModComponentData(e, teleportStateCd);
+                }
+            }
+            else if (stateInfo.currentState == StateID.OctopusBossSpawnTentacles)
+            {
+                if (existingTenticleCount >= moddedStateCd.maxTentacleCap)
+                {
+                    OctopusBossSpawnTentaclesStateCD spawnTentaclesStateCd =
+                        serverWorld.EntityManager.GetModComponentData<OctopusBossSpawnTentaclesStateCD>(e);
+                    if (spawnTentaclesStateCd.internalState == 2)
+                        spawnTentaclesStateCd.internalState = 3;
+                    serverWorld.EntityManager.SetModComponentData(e, spawnTentaclesStateCd);
+                }
+            }
+
+            EntityQuery q2 = serverWorld.EntityManager.CreateEntityQuery(
+                ComponentModule.ReadOnly<OctopusTenticleCounterCD>(),
+                ComponentModule.ReadWrite<Translation>());
+            int ct = 0;
+            foreach (var ent2 in q2.ToEntityArray(Allocator.Temp))
+            { 
+                if (serverWorld.EntityManager.GetModComponentData<HealthCD>(ent2).health > 0)
+                    ct++;
+            }
+            existingTenticleCount = ct;
         }
     }
 
     private float timer;
-
+    private static int deleted = -1;
     private void CreateRotatingBeams(RotatingBeamCD rotatingBeamCd)
     {
         timer = Random.Range(0, Mathf.PI);
@@ -229,12 +291,14 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             .databaseBankBlob;
         EntityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
         List<float3> posLeft = new List<float3>(positionsRelative);
-        for (int i = 0; i < rotatingBeamCd.amount; i++)
+        for (int i = 0; i < rotatingBeamCd.amount-1; i++)
         {
             Entity orb = EntityUtility.CreateEntity(EntityCommandBuffer, Constants.OctopusMarkerPos
                 , rotatingBeamCd.ObjectID, 1, bank, 0);
             EntityCommandBuffer.AddModComponent<DoesCircleCD>(orb);
         }
+        deleted = Random.Range(4, rotatingBeamCd.amount);
+        Plugin.logger.LogInfo("Deleted is " + deleted + "one");
 
         EntityCommandBuffer.Playback(Manager.ecs.ServerWorld.EntityManager);
         EntityCommandBuffer.Dispose();
@@ -244,12 +308,19 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         timer += Time.fixedDeltaTime * rotatingBeamCd.speed;
         EntityQuery circleQuery = serverWorld.EntityManager.CreateEntityQuery(
             ComponentModule.ReadOnly<ProjectileCD>(),
+            ComponentModule.ReadOnly<FactionCD>(),
             ComponentModule.ReadOnly<DoesCircleCD>(),
             ComponentModule.ReadOnly<OwnerCD>(),
             ComponentModule.ReadWrite<Translation>());
         int i = 1;
         foreach (var ent in circleQuery.ToEntityArray(Allocator.Temp))
         {
+            //Plugin.logger.LogInfo("I is: " + i);
+            if (i == deleted)
+            {
+                //Plugin.logger.LogInfo("Deleted " + deleted + "and i is " + i);
+                i++;
+            }
             OwnerCD ownerCd = serverWorld.EntityManager.GetModComponentData<OwnerCD>(ent);
             ownerCd.owner = owner;
             serverWorld.EntityManager.SetModComponentData(ent, ownerCd);
@@ -259,6 +330,10 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             ProjectileCD projectileCd = serverWorld.EntityManager.GetModComponentData<ProjectileCD>(ent);
             projectileCd.damage = 420;
             serverWorld.EntityManager.SetModComponentData(ent, projectileCd);
+            FactionCD factionCd = serverWorld.EntityManager.GetModComponentData<FactionCD>(ent);
+            factionCd.originalFaction = FactionID.SeaCreature;
+            factionCd.faction = FactionID.SeaCreature;
+            serverWorld.EntityManager.SetModComponentData(ent, factionCd);
             i++;
         }
     }
