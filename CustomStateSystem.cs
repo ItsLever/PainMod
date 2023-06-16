@@ -113,6 +113,12 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 stateInfo.EnterState(StateID.RangeAttack);
                 return true;
             }
+            if (healthCd.HasFullHealth)
+            {
+                stateInfo.LeaveState();
+                stateInfo.EnterState(StateID.OctopusBossLurkingBelow);
+                return true;
+            }
             // By returning true here we signal that the 'stateInfo' field has changed
             return true;
         }
@@ -176,7 +182,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
     private static bool allEnemiesDead;
     private static int existingTenticleCount = 0;
 
-    public static void SetDafaults(ObjectID bossID)
+    private void SetDafaults(ObjectID bossID)
     {
         switch (bossID)
         {
@@ -186,7 +192,28 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 isDoingForcedTeleport = false;
                 existingTenticleCount = 0;
                 allEnemiesDead = false;
-                Plugin.logger.LogInfo("Octopus is de-spawning");
+                var q3 = serverWorld.EntityManager.CreateEntityQuery(
+                    ComponentModule.ReadOnly<MustBeDestroyedForOctopusLeaveStateCD>(),
+                    ComponentModule.ReadWrite<Translation>());
+                foreach (var entity in q3.ToEntityArray(Allocator.Temp))
+                {
+                    serverWorld.EntityManager.DestroyEntity(entity);
+                }
+                var q4 = serverWorld.EntityManager.CreateEntityQuery(
+                    ComponentModule.ReadOnly<OctopusTenticleCounterCD>(),
+                    ComponentModule.ReadWrite<Translation>());
+                foreach (var entity in q4.ToEntityArray(Allocator.Temp))
+                {
+                    serverWorld.EntityManager.DestroyEntity(entity);
+                }
+                var q5 = serverWorld.EntityManager.CreateEntityQuery(
+                    ComponentModule.ReadOnly<DoesCircleCD>(),
+                    ComponentModule.ReadWrite<Translation>());
+                foreach (var entity in q5.ToEntityArray(Allocator.Temp))
+                {
+                    serverWorld.EntityManager.DestroyEntity(entity);
+                }
+                //Plugin.logger.LogInfo("Octopus is de-spawning");
                 break;
         }
     }
@@ -208,6 +235,8 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             //Plugin.logger.LogInfo("Current state is " + stateInfo.currentState);
             if (stateInfo.currentState == octopusFirstState)
             {
+                if(healthCd.HasFullHealth)
+                    return;
                 if (!hasSpawnedInEnemies)
                 {
                     Plugin.logger.LogInfo("IN OCTOPUS MODDED STATE");
