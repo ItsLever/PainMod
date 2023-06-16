@@ -160,7 +160,7 @@ namespace PainMod
                 isSameAsLastCount = true;
             if (!isSameAsLastCount)
             {
-                Plugin.logger.LogInfo("Count is " + (int) count + " and time delta time is " + Time.fixedDeltaTime);
+                //Plugin.logger.LogInfo("Count is " + (int) count + " and time delta time is " + Time.fixedDeltaTime);
                 if (Manager._instance.player.GetOffHand().objectID == ObjectID.Lantern || Manager._instance.player.equipmentHandler.lanternInventoryHandler.GetObjectData(0).objectID == ObjectID.SmallLantern)
                 {
                     if (Plugin.darkChallengeActive)

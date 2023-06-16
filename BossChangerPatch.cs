@@ -311,9 +311,9 @@ namespace PainMod
                         var windup = boss.GetComponent<WindupCDAuthoring>();
                         windup.hasWindup = true;
                         windup.windupTiers = 4;
-                        windup.windupTime = 30;
+                        windup.windupTime = 12;
                         windup.weaponEffectType = WeaponEffectType.Metal;
-                        windup.windupMultiplier = 1;
+                        windup.windupMultiplier = 0;
                     }
                 }
                 /*else if (boss.objectInfo.objectType == ObjectType.MeleeWeapon)

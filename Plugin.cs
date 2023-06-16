@@ -94,6 +94,7 @@ namespace PainMod
             ComponentModule.RegisterECSComponent<RotatingBeamCDAuthoring>();
             ComponentModule.RegisterECSComponent<DoesCircleCD>();
             ComponentModule.RegisterECSComponent<DoesCircleCDAuthoring>();
+            SystemModule.RegisterSystem<CustomSecondaryUseSystem>();
             logger = Log;
             // Plugin startup logic
             ClassInjector.RegisterTypeInIl2Cpp<MonoStuff>();

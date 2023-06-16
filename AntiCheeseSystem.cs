@@ -37,7 +37,7 @@ public class AntiCheeseSystem : MonoBehaviour, IPseudoServerSystem
         foreach (var e in bossEntities)
         {
             var bossID = serverWorld.EntityManager.GetModComponentData<ObjectDataCD>(e).objectID;
-            Plugin.logger.LogInfo("Boss ID is: " + bossID);
+            //Plugin.logger.LogInfo("Boss ID is: " + bossID);
             bool isInCombat = serverWorld.EntityManager.GetModComponentData<IsInCombatCD>(e).isInCombat;
             double distanceFromPlayer = 
                 math.distance(serverWorld.EntityManager.GetModComponentData<SpawnPointCD>(e).position,

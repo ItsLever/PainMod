@@ -168,15 +168,29 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         return false;   
     }
 
-    private float3[] positionsRelative = {new float3(4,0,1), new float3(12,0, 2), new float3(13,0,9), new float3(11,0, -8), new float3(6,0,5),
+    private static float3[] positionsRelative = {new float3(4,0,1), new float3(12,0, 2), new float3(13,0,9), new float3(11,0, -8), new float3(6,0,5),
         new float3(-3, 0, 3), new float3(-10, 0, 1), new float3(-1, 0, -4), new float3(-13, 0, 8), new float3(-6, 0, 7), new float3(-4, 0, -8),
         new float3(-4, 0, -14), new float3(-11, 0, -11), new float3(6, 0, -5), new float3(4, 0, -12)};
-    private bool hasSpawnedInEnemies = false;
-    private float2 octopusBossLurkSpot;
-    private bool hasGottenLurkSpot = false;
+    private static bool hasSpawnedInEnemies = false;
     private EntityCommandBuffer EntityCommandBuffer;
-    private bool allEnemiesDead;
+    private static bool allEnemiesDead;
     private static int existingTenticleCount = 0;
+
+    public static void SetDafaults(ObjectID bossID)
+    {
+        switch (bossID)
+        {
+            case ObjectID.OctopusBoss:
+                hasSpawnedInEnemies = false;
+                hasStartedSecondState = false;
+                isDoingForcedTeleport = false;
+                existingTenticleCount = 0;
+                allEnemiesDead = false;
+                Plugin.logger.LogInfo("Octopus is de-spawning");
+                break;
+        }
+    }
+
     private void FixedUpdate()
     {
         if (serverWorld == null) return;
@@ -188,7 +202,9 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             OctopusModdedStateCD moddedStateCd = serverWorld.EntityManager.GetModComponentData<OctopusModdedStateCD>(e);
             DamageReductionCD reductionCd = serverWorld.EntityManager.GetModComponentData<DamageReductionCD>(e);
             RotatingBeamCD rotatingBeamCd = serverWorld.EntityManager.GetModComponentData<RotatingBeamCD>(e);
-            
+            HealthCD healthCd = serverWorld.EntityManager.GetModComponentData<HealthCD>(e);
+            if(healthCd.HasFullHealth)
+                SetDafaults(ObjectID.OctopusBoss);
             //Plugin.logger.LogInfo("Current state is " + stateInfo.currentState);
             if (stateInfo.currentState == octopusFirstState)
             {
@@ -291,7 +307,7 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
             .databaseBankBlob;
         EntityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
         List<float3> posLeft = new List<float3>(positionsRelative);
-        for (int i = 0; i < rotatingBeamCd.amount-1; i++)
+        for (int i = 0; i < rotatingBeamCd.amount-2; i++)
         {
             Entity orb = EntityUtility.CreateEntity(EntityCommandBuffer, Constants.OctopusMarkerPos
                 , rotatingBeamCd.ObjectID, 1, bank, 0);
@@ -316,10 +332,10 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
         foreach (var ent in circleQuery.ToEntityArray(Allocator.Temp))
         {
             //Plugin.logger.LogInfo("I is: " + i);
-            if (i == deleted)
+            if (i == deleted-1)
             {
                 //Plugin.logger.LogInfo("Deleted " + deleted + "and i is " + i);
-                i++;
+                i+=2;
             }
             OwnerCD ownerCd = serverWorld.EntityManager.GetModComponentData<OwnerCD>(ent);
             ownerCd.owner = owner;

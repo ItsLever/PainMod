@@ -70,7 +70,7 @@ public class FirstSystemTest : MonoBehaviour
                 //Plugin.logger.LogInfo("WaitTime " + waitTime);
                 if (waitTime <= 0)
                 {
-                    Plugin.logger.LogInfo("Great wall has been lowered");
+                    //Plugin.logger.LogInfo("Great wall has been lowered");
                     //do enemy changes
                     EntityQuery query = serverWorld.EntityManager.CreateEntityQuery(
                         ComponentType.ReadOnly<HealthCD>());
@@ -86,7 +86,7 @@ public class FirstSystemTest : MonoBehaviour
                                 healthCD.maxHealth = aggrSlimeHp;
                                 healthCD.health = aggrSlimeHp;
                                 serverWorld.EntityManager.SetComponentData(e2, healthCD);
-                                Plugin.logger.LogInfo("This is a new aggressive slime blob and its hp is now " + serverWorld.EntityManager.GetModComponentData<HealthCD>(e2).maxHealth);
+                                //Plugin.logger.LogInfo("This is a new aggressive slime blob and its hp is now " + serverWorld.EntityManager.GetModComponentData<HealthCD>(e2).maxHealth);
                             }
 
                             if (serverWorld.EntityManager.GetModComponentData<JumpAttackStateCD>(e2).jumpDamage !=
