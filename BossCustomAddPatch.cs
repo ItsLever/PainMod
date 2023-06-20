@@ -428,11 +428,6 @@ internal class BossCustomAddPatch
             }
         }
     }
-    [HarmonyPatch(typeof(EntityMonoBehaviour), nameof(EntityMonoBehaviour.UpdateHealthBar))]
-    [HarmonyPostfix]
-    public static void BirdBossThing(BirdBoss __instance)
-    {
-    }
 
     public static bool birdPhase2Active = false;
     public static bool birdPhase3Active = false;
@@ -445,6 +440,7 @@ internal class BossCustomAddPatch
     [HarmonyPostfix]
     public static void BirdLogger(BirdBoss __instance)
     {
+        return;
         if(__instance==null)
             return;
         if (!__instance.entityExist)
@@ -509,6 +505,7 @@ internal class BossCustomAddPatch
     [HarmonyPostfix]
     public static void BirdTimed(Manager __instance)
     {
+        return;
         if (!__instance.currentSceneHandler.isInGame)
             return;
       //  Plugin.logger.LogInfo("Can Start Timer is: " + canStartTimer);
@@ -589,6 +586,7 @@ internal class BossCustomAddPatch
 
     public static void ResetValuesBird()
     {
+        return;
         birdPhase2Active = false;
         birdPhase3Active = false;
         allowCreateBoundaries = true;
@@ -602,6 +600,7 @@ internal class BossCustomAddPatch
     [HarmonyPostfix]
     public static void OnOccupiedBird(BirdBoss __instance)
     {
+        return;
         if(__instance==null)
             return;
         if (!__instance.entityExist)
@@ -636,6 +635,7 @@ internal class BossCustomAddPatch
     [HarmonyPostfix]
     public static void eggByeBye(EntityMonoBehaviour __instance)
     {
+        return;
         if(__instance==null)
             return;
         if (!__instance.entityExist)
@@ -650,6 +650,7 @@ internal class BossCustomAddPatch
     private static List<GameObject> validBossBirds = new List<GameObject>();
     private static void SetValidBossBirds()
     {
+        return;
         var origo = Manager._instance._cameraManager.OrigoTransform;
         foreach (var childtransform in origo.GetComponentsInChildren<Transform>())
         {

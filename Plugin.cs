@@ -70,6 +70,7 @@ namespace PainMod
         public static ObjectID maxHealthBuffStation;
         public static ObjectID wormholeIdol;
         public static ObjectID octopusOrb;
+        public static ObjectID birdBossBarrier;
         public override void Load()
         {
             ClassInjector.RegisterTypeInIl2Cpp<CustomEnergyModProjectile>();
@@ -77,6 +78,7 @@ namespace PainMod
             ClassInjector.RegisterTypeInIl2Cpp<CustomMaxHpStation>();
             ClassInjector.RegisterTypeInIl2Cpp<FirstSystemTest>();
             ClassInjector.RegisterTypeInIl2Cpp<OctopusProtectiveOrb>();
+            ClassInjector.RegisterTypeInIl2Cpp<CustomBirdBossBarrier>();
             AddComponent<FirstSystemTest>();
             SystemModule.RegisterSystem<CustomStateSystem>();
             ComponentModule.RegisterECSComponent<OctopusModdedStateCD>();
@@ -189,6 +191,9 @@ namespace PainMod
             octopusOrb = EntityModule.AddEntity("PainMod:OctopusOrb",
                 "Assets/PainMod/Assets/OctopusProtectionOrbEntity.prefab");
             EntityModule.AddEntityLocalization(octopusOrb, "Octopus Orb", "yes");
+            birdBossBarrier = EntityModule.AddEntity("PainMod:BirdBossBarrier",
+                "Assets/PainMod/Assets/BirdBossBarrierEntity.prefab");
+            EntityModule.AddEntityLocalization(birdBossBarrier, "Bird Boss Barrier", "Wait... you shouldn't have this?");
             /* CustomEntityModule.AddEntityLocalization(objectID,
                  "Wall",
                  "yeah theres no way this will work lol."); */

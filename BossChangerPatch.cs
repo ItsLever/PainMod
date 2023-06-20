@@ -153,7 +153,8 @@ namespace PainMod
                         boss.GetComponent<HealthCDAuthoring>().dontCalculateHealthFromLevel = true;
                         boss.GetComponent<HealthCDAuthoring>().startHealth = 69420;
                         boss.GetComponent<HealthCDAuthoring>().maxHealth = 69420;
-                        boss.GetComponent<BirdBossAuthoring>().durationBeforeStartingToSpawnStones = 1;
+                        //replaced rework with system based
+                        /*boss.GetComponent<BirdBossAuthoring>().durationBeforeStartingToSpawnStones = 1;
                         boss.GetComponent<BirdBossAuthoring>().durationBeforeStartingToSpawnStones = 3;
                         var spwnCfg = new BirdBossAuthoring.SpawnConfiguration();
                         var spwnCfg2 = new BirdBossAuthoring.SpawnConfiguration();
@@ -167,7 +168,7 @@ namespace PainMod
                        boss.GetComponent<TeleportStateCDAuthoring>().allowedRadiusToMoveFromPosition = 0;
                        boss.GetComponent<TeleportStateCDAuthoring>().minCooldown = 10000;
                        boss.GetComponent<TeleportStateCDAuthoring>().minCooldown = 10000;
-                       boss.GetComponent<SpawnEntityOnDeathCDAuthoring>().spawnChance = 0.75f;
+                       boss.GetComponent<SpawnEntityOnDeathCDAuthoring>().spawnChance = 0.75f;*/
                     }
                     else if (boss.objectInfo.objectID == ObjectID.KingSlime)
                     {
