@@ -96,6 +96,12 @@ namespace PainMod
             ComponentModule.RegisterECSComponent<RotatingBeamCDAuthoring>();
             ComponentModule.RegisterECSComponent<DoesCircleCD>();
             ComponentModule.RegisterECSComponent<DoesCircleCDAuthoring>();
+            SystemModule.RegisterSystem<BirdBossReworkSystem>();
+            ComponentModule.RegisterECSComponent<BirdBossReworkCD>();
+            ComponentModule.RegisterECSComponent<BirdBossReworkCDAuthoring>();
+            ComponentModule.RegisterECSComponent<BirdBarrierCD>();
+            ComponentModule.RegisterECSComponent<BirdStoneCD>();
+            ComponentModule.RegisterECSComponent<BirdStoneCDAuthoring>();
             SystemModule.RegisterSystem<CustomSecondaryUseSystem>();
             logger = Log;
             // Plugin startup logic

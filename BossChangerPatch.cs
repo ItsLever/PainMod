@@ -153,6 +153,12 @@ namespace PainMod
                         boss.GetComponent<HealthCDAuthoring>().dontCalculateHealthFromLevel = true;
                         boss.GetComponent<HealthCDAuthoring>().startHealth = 69420;
                         boss.GetComponent<HealthCDAuthoring>().maxHealth = 69420;
+                        if (boss.gameObject.GetComponent<BirdBossReworkCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<BirdBossReworkCDAuthoring>();
+                        boss.gameObject.GetComponent<BirdBossReworkCDAuthoring>().radius.Value = 16;
+                        boss.gameObject.GetComponent<BirdBossReworkCDAuthoring>().amount.Value = 75;
+                        boss.gameObject.GetComponent<BirdBossReworkCDAuthoring>().type.Value = 0;
+                        boss.gameObject.GetComponent<BirdBossReworkCDAuthoring>().iState.Value = 0;
                         //replaced rework with system based
                         /*boss.GetComponent<BirdBossAuthoring>().durationBeforeStartingToSpawnStones = 1;
                         boss.GetComponent<BirdBossAuthoring>().durationBeforeStartingToSpawnStones = 3;
@@ -292,6 +298,8 @@ namespace PainMod
                     {
                         boss.GetComponent<HealNearbyEntitiesCDAuthoring>().radius = 27;
                         boss.GetComponent<HealNearbyEntitiesCDAuthoring>().healthPerSecond = 225;
+                        if (boss.GetComponent<BirdStoneCDAuthoring>() == null)
+                            boss.gameObject.AddComponent<BirdStoneCDAuthoring>();
                     }
                     else if (boss.objectInfo.objectID == ObjectID.BirdBossBeam)
                     {

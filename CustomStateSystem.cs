@@ -57,6 +57,8 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                                   " at " + serverWorld.EntityManager.GetModComponentData<Translation>(ent).Value);
             if(serverWorld.EntityManager.GetModComponentData<BossSpawnLocationCD>(ent).bossID == ObjectID.OctopusBoss)
                 Constants.OctopusMarkerPos = serverWorld.EntityManager.GetModComponentData<Translation>(ent).Value;
+            else if(serverWorld.EntityManager.GetModComponentData<BossSpawnLocationCD>(ent).bossID == ObjectID.BirdBoss)
+                Constants.BirdMarkerPos = serverWorld.EntityManager.GetModComponentData<Translation>(ent).Value;
         }
 
         hasSpawnedInEnemies = false;
@@ -212,6 +214,15 @@ public class CustomStateSystem : MonoBehaviour, IPseudoServerSystem, IStateReque
                 foreach (var entity in q5.ToEntityArray(Allocator.Temp))
                 {
                     serverWorld.EntityManager.DestroyEntity(entity);
+                }
+                var temp = serverWorld.EntityManager.CreateEntityQuery(
+                    ComponentModule.ReadOnly<OctopusModdedStateCD>(),
+                    ComponentModule.ReadWrite<Translation>());
+                foreach (var e in temp.ToEntityArray(Allocator.Temp))
+                {
+                    DamageReductionCD reductionCd = serverWorld.EntityManager.GetModComponentData<DamageReductionCD>(e);
+                    reductionCd.reduction = 0;
+                    serverWorld.EntityManager.SetModComponentData(e, reductionCd);
                 }
                 //Plugin.logger.LogInfo("Octopus is de-spawning");
                 break;
